@@ -8,7 +8,8 @@
     "build": "webpack --mode production",
     "electron": "electron .",
     "dev": "yarn tsc && yarn electron",
-    "compile": "yarn tsc && electron-packager . shoutout --platform=win32 --arch=x64 --out=build/ --overwrite"
+    "compile:win": "yarn tsc && electron-packager . shoutout --platform=win32 --arch=x64 --out=build/ --overwrite",
+    "compile:mac": "yarn tsc && electron-packager . shoutout --platform=darwin --arch=x64 --out=build/ --overwrite"
   },
   "keywords": [],
   "author": "",
