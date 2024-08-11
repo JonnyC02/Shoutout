@@ -2,32 +2,23 @@
   "name": "shoutout",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
+  "type": "module",
   "scripts": {
-    "start": "webpack serve",
-    "electron": "electron .",
-    "build": "webpack"
+    "start": "yarn tsc && electron .",
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
     "electron": "^31.3.1",
-    "typescript": "^5.5.4",
-    "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
     "electron-reload": "^2.0.0-alpha.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.6.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1"
   }
