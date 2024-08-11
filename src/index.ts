@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';  // Use ES module import
+import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -12,14 +12,14 @@ function createWindow(): void {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),  // You might want to convert `preload.js` to TypeScript too
+            preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false,
         }
     });
 
     win.loadURL(
-        `file://${path.join(__dirname, '../src/index.html')}`  // Bundled file
+        `file://${path.join(__dirname, '../src/index.html')}`
     );
 }
 
