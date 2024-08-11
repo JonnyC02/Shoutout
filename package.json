@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "yarn tsc && electron .",
+    "start": "yarn tsc && electron ."
   },
   "keywords": [],
   "author": "",
