@@ -50,13 +50,13 @@ async function getDecibelLevels(analyser, audioDataArray) {
     const average = sum / audioDataArray.length;
     const decibels = 20 * Math.log10(average / 255);
   
-    console.log(`Video Decibel level: ${decibels.toFixed(2)} dB`);
+    console.log(`Decibel level: ${decibels.toFixed(2)} dB`);
     return decibels;
 }
 
 async function manipulationLoop() {
   // video audio pre-processing
-  let video =  document.getElementById('videoPlayer');
+  let video = document.getElementById('videoPlayer');
   var videoAudioCtx = new AudioContext()
   var videoMediasource = videoAudioCtx.createMediaElementSource(video)
   const videoAnalyser = videoAudioCtx.createAnalyser();
@@ -64,15 +64,34 @@ async function manipulationLoop() {
   videoAnalyser.connect(videoAudioCtx.destination);
   const videoAudioDataArray = new Uint8Array(videoAnalyser.frequencyBinCount);
 
+  // microphone audio pre-processing
+  let microphoneStream = await getMicrophone();
+  var microphoneAudioCtx = new AudioContext()
+  var microphoneMediasource = microphoneAudioCtx.createMediaStreamSource(microphoneStream)
+  const microphoneAnalyser = microphoneAudioCtx.createAnalyser();
+  microphoneMediasource.connect(microphoneAnalyser);
+  const microphoneAudioDataArray = new Uint8Array(microphoneAnalyser.frequencyBinCount);
+
+
   // manipulation loop
   while (!video.ended) {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 100));
     await getDecibelLevels(videoAnalyser, videoAudioDataArray);
+    await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray);
   }
 
 
 }
 
+async function getMicrophone() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      return stream;
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      return null;
+    }
+}
 
 
 manipulationLoop();
