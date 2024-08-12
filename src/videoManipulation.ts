@@ -50,7 +50,7 @@ async function setVideoFileFromUrl(): Promise<void> {
     }
 }
 
-async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Array): Promise<number> {
+async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Array, isMic?: boolean): Promise<number> {
     analyser.getByteFrequencyData(audioDataArray);
     let sum = 0;
     for (let i = 0; i < audioDataArray.length; i++) {
@@ -58,7 +58,16 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
     }
     const average = sum / audioDataArray.length;
     const decibels = 20 * Math.log10(average / 255);
-
+    if (isMic) {
+        const span = document.getElementById("micInput")
+        if (span) {
+            let displayValue = decibels * -1;
+            if (displayValue === Infinity) {
+                displayValue = 0;
+            }
+            span.textContent = `Decibel Level: ${displayValue.toFixed(2)} dB`
+        }
+    }
     console.log(`Decibel level: ${decibels.toFixed(2)} dB`);
     return decibels;
 }
@@ -89,7 +98,7 @@ async function manipulationLoop(): Promise<void> {
     while (!video.ended) {
         await new Promise(r => setTimeout(r, 100));
         await getDecibelLevels(videoAnalyser, videoAudioDataArray);
-        await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray);
+        await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true);
     }
 }
 
