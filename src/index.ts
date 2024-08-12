@@ -15,8 +15,11 @@ function createWindow(): void {
             preload: path.join(__dirname, 'preload.js'),  // You might want to convert `preload.js` to TypeScript too
             nodeIntegration: true,
             contextIsolation: false,
-        }
+        },
     });
+
+    win.maximize();
+    win.webContents.openDevTools()
 
     win.loadURL(
         `file://${path.join(__dirname, '../src/index.html')}`  // Bundled file
