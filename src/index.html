@@ -12,7 +12,9 @@
         <input type="url" id="videoUrl" placeholder="Enter video URL">
         <button onclick="setVideoFile()">Click me to import a video by File</button>
         <button onclick="setVideoFileFromUrl()">Click me to import a video by URL</button>
-        <video id="videoPlayer"></video>
+        <video id="videoPlayer" height="700px"></video>
+        <!-- A visual representation of how close you are to having it play at a normal rate -->
+        <progress id="audioLevelDifference" value="0" max="100"></progress>
     </div>
     <script src="./renderer.js"></script>
     <script src="./videoManipulation.js"></script>

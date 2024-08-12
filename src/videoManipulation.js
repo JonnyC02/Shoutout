@@ -76,8 +76,22 @@ async function manipulationLoop() {
   // manipulation loop
   while (!video.ended) {
     await new Promise(r => setTimeout(r, 100));
-    await getDecibelLevels(videoAnalyser, videoAudioDataArray);
-    await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray);
+    let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
+    let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray) / 2;
+    if (videoDb <= -Infinity) {
+     console.log("Video will keep playing");
+     video.playbackRate = 1;
+     setAudioLevelBar(100);
+    } else if (videoDb > microphoneDb) {
+      video.playbackRate = videoDb/microphoneDb;
+      microphoneDb = microphoneDb <= -Infinity ? 0 : microphoneDb;
+      setAudioLevelBar(Math.abs((videoDb)/(videoDb - microphoneDb)) * 100); // TODO - This is not correct lol
+      console.log("Video audio is louder than microphone audio");
+    } else if (videoDb < microphoneDb) {
+      video.playbackRate = 1;
+      setAudioLevelBar(100);
+      console.log("Microphone audio is louder than video audio");
+    }
   }
 
 
@@ -93,5 +107,10 @@ async function getMicrophone() {
     }
 }
 
+function setAudioLevelBar(value) {
+    const audioLevelBar = document.getElementById('audioLevelDifference');
+    console.log(value);
+    audioLevelBar.value = value;
+}
 
 manipulationLoop();
