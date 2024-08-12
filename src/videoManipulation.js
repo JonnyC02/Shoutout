@@ -1,4 +1,4 @@
-async function getVideoFileUrl(){
+async function getVideoFileUrl() {
     try {
       const [fileHandle] = await showOpenFilePicker({
         types: [{
@@ -24,7 +24,7 @@ function setVideoSrc(src) {
     const video = document.getElementById('videoPlayer');
     video.src = src;
     video.autoplay = true;
-    video.controls = false;
+    video.controls = true;
 }
 
 async function setVideoFile() {
@@ -40,3 +40,39 @@ async function setVideoFileFromUrl() {
           alert("Please enter a valid video URL");
         }
 }
+
+async function getDecibelLevels(analyser, audioDataArray) {
+    analyser.getByteFrequencyData(audioDataArray);
+    let sum = 0;
+    for (let i = 0; i < audioDataArray.length; i++) {
+      sum += audioDataArray[i];
+    }
+    const average = sum / audioDataArray.length;
+    const decibels = 20 * Math.log10(average / 255);
+  
+    console.log(`Video Decibel level: ${decibels.toFixed(2)} dB`);
+    return decibels;
+}
+
+async function manipulationLoop() {
+  // video audio pre-processing
+  let video =  document.getElementById('videoPlayer');
+  var videoAudioCtx = new AudioContext()
+  var videoMediasource = videoAudioCtx.createMediaElementSource(video)
+  const videoAnalyser = videoAudioCtx.createAnalyser();
+  videoMediasource.connect(videoAnalyser);
+  videoAnalyser.connect(videoAudioCtx.destination);
+  const videoAudioDataArray = new Uint8Array(videoAnalyser.frequencyBinCount);
+
+  // manipulation loop
+  while (!video.ended) {
+    await new Promise(r => setTimeout(r, 1000));
+    await getDecibelLevels(videoAnalyser, videoAudioDataArray);
+  }
+
+
+}
+
+
+
+manipulationLoop();
