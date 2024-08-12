@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "target": "ESNext",
+        "types": [ "@types/wicg-file-system-access"],
         "module": "ESNext",
         "jsx": "react",
         "strict": true,
