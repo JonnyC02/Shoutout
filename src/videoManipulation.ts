@@ -24,7 +24,7 @@ function setVideoSrc(src: string): void {
     if (video) {
         video.src = src;
         video.autoplay = true;
-        video.controls = true;
+        video.controls = false;
     }
 }
 
@@ -34,10 +34,15 @@ async function setVideoFile(): Promise<void> {
 }
 
 async function setVideoFileFromUrl(): Promise<void> {
+    const youtubeRegex = /youtube.com/g
+    const shortRegex = /youtu.be/g
     const videoUrlInput = document.getElementById('videoUrl') as HTMLInputElement;
     if (videoUrlInput) {
         const videoUrl = videoUrlInput.value;
-        if (videoUrl) {
+        const isYouTube = youtubeRegex.test(videoUrl) || shortRegex.test(videoUrl);
+        if (isYouTube) {
+            alert("Please use a URL ending with a file extension (not YouTube)");
+        } else if (videoUrl) {
             setVideoSrc(videoUrl);
         } else {
             alert("Please enter a valid video URL");
