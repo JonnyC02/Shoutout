@@ -10,10 +10,12 @@
 <body>
     <div id="root">
         <input type="url" id="videoUrl" placeholder="Enter video URL">
-        <button onclick="setVideoFile()">Click me to import a video</button>
+        <button onclick="setVideoFile()">Click me to import a video by File</button>
+        <button onclick="setVideoFileFromUrl()">Click me to import a video by URL</button>
+        <video id="videoPlayer"></video>
     </div>
     <script src="./renderer.js"></script>
-    <script src="./videoManipulation.ts"></script>
+    <script src="./videoManipulation.js"></script>
 </body>
 
 </html>

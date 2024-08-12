@@ -1,10 +1,6 @@
-
-
-
-
-async function getVideoFileUrl(): Promise<string> {
+async function getVideoFileUrl(){
     try {
-      const [fileHandle] = await window.showOpenFilePicker({
+      const [fileHandle] = await showOpenFilePicker({
         types: [{
           description: 'Video Files',
           accept: {
@@ -24,8 +20,8 @@ async function getVideoFileUrl(): Promise<string> {
     }
 }
 
-function setVideoSrc(src: string) {
-    const video = document.getElementById('primaryVideo') as HTMLVideoElement;
+function setVideoSrc(src) {
+    const video = document.getElementById('videoPlayer');
     video.src = src;
     video.autoplay = true;
     video.controls = false;
@@ -34,4 +30,13 @@ function setVideoSrc(src: string) {
 async function setVideoFile() {
     const videoFileUrl = await getVideoFileUrl();
     setVideoSrc(videoFileUrl);
+}
+
+async function setVideoFileFromUrl() {
+        const videoUrl = document.getElementById('videoUrl').value;
+        if (videoUrl) {
+          setVideoSrc(videoUrl);
+        } else {
+          alert("Please enter a valid video URL");
+        }
 }
