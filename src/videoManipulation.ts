@@ -61,14 +61,14 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
     if (isMic) {
         const span = document.getElementById("micInput")
         if (span) {
-            let displayValue = dBToVolume(decibels)*100;
+            let displayValue = dBToVolume(decibels) * 100;
             if (displayValue === Infinity) {
                 displayValue = 0;
             }
             span.textContent = `Microphone volume: ${displayValue.toFixed(2)}%`
         }
     }
-    console.log(`Decibel level: ${decibels.toFixed(2)} dB`);
+    console.log(isMic ? `Mic Decibel level: ${decibels.toFixed(2)} dB` : `Video Decibel level: ${decibels.toFixed(2)}`);
     return decibels;
 }
 
@@ -99,17 +99,25 @@ async function manipulationLoop(): Promise<void> {
         await new Promise(r => setTimeout(r, 100));
         let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
         let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 2;
-        if (videoDb <= -Infinity) {
-         console.log("Video will keep playing");
-         video.playbackRate = 1;
-        } else if (videoDb > microphoneDb) {
-          video.playbackRate = videoDb/microphoneDb;
-          console.log("Video audio is louder than microphone audio");
-        } else if (videoDb < microphoneDb) {
-          video.playbackRate = 1;
-          console.log("Microphone audio is louder than video audio");
+        if (videoDb === -Infinity) {
+            console.log("Video will not keep playing");
+            if (videoDb > microphoneDb) {
+                video.playbackRate = 0;
+                console.log("Video audio is louder than microphone audio");
+            } else if (videoDb < microphoneDb) {
+                video.playbackRate = 1;
+                console.log("Microphone audio is louder than video audio");
+            }
+        } else {
+            if ((videoDb * 1.1) > microphoneDb) {
+                video.playbackRate = 0;
+                console.log("Video audio is louder than microphone audio");
+            } else if ((videoDb * 1.1) < microphoneDb) {
+                video.playbackRate = 1;
+                console.log("Microphone audio is louder than video audio");
+            }
         }
-      }
+    }
 }
 
 async function getMicrophone(): Promise<MediaStream | null> {
