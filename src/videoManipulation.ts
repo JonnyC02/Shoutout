@@ -61,11 +61,11 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
     if (isMic) {
         const span = document.getElementById("micInput")
         if (span) {
-            let displayValue = decibels * -1;
+            let displayValue = dBToVolume(decibels)*100;
             if (displayValue === Infinity) {
                 displayValue = 0;
             }
-            span.textContent = `Decibel Level: ${displayValue.toFixed(2)} dB`
+            span.textContent = `Microphone volume: ${displayValue.toFixed(2)}%`
         }
     }
     console.log(`Decibel level: ${decibels.toFixed(2)} dB`);
@@ -97,9 +97,19 @@ async function manipulationLoop(): Promise<void> {
     // manipulation loop
     while (!video.ended) {
         await new Promise(r => setTimeout(r, 100));
-        await getDecibelLevels(videoAnalyser, videoAudioDataArray);
-        await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true);
-    }
+        let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
+        let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 2;
+        if (videoDb <= -Infinity) {
+         console.log("Video will keep playing");
+         video.playbackRate = 1;
+        } else if (videoDb > microphoneDb) {
+          video.playbackRate = videoDb/microphoneDb;
+          console.log("Video audio is louder than microphone audio");
+        } else if (videoDb < microphoneDb) {
+          video.playbackRate = 1;
+          console.log("Microphone audio is louder than video audio");
+        }
+      }
 }
 
 async function getMicrophone(): Promise<MediaStream | null> {
@@ -110,6 +120,10 @@ async function getMicrophone(): Promise<MediaStream | null> {
         console.error('Error accessing microphone:', err);
         return null;
     }
+}
+
+function dBToVolume(dB: number): number {
+    return Math.pow(10, dB / 20);
 }
 
 manipulationLoop();
