@@ -66,6 +66,8 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
                 displayValue = 0;
             }
             span.textContent = `Microphone volume: ${displayValue.toFixed(2)}%`
+            span.style.color = getGradientColor(displayValue);
+            setShakeIntensity(displayValue);
         }
     }
     console.log(isMic ? `Mic Decibel level: ${decibels.toFixed(2)} dB` : `Video Decibel level: ${decibels.toFixed(2)}`);
@@ -132,6 +134,52 @@ async function getMicrophone(): Promise<MediaStream | null> {
 
 function dBToVolume(dB: number): number {
     return Math.pow(10, dB / 20);
+}
+
+function getGradientColor(value: number): string {
+    // Ensure the value is within the range of 0 to 100
+    value = Math.min(Math.max(value, 0), 100);
+
+    let r, g, b;
+
+    if (value <= 50) {
+        // Green to Yellow
+        r = Math.floor((value / 50) * 255);
+        g = 255;
+        b = 0;
+    } else {
+        // Yellow to Red
+        r = 255;
+        g = Math.floor(255 - ((value - 50) / 50) * 255);
+        b = 0;
+    }
+
+    // Convert RGB to a hexadecimal color string
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+function setShakeIntensity(value: number): void {
+    value = Math.min(Math.max(value, 0), 100);
+    const intensity = value / 10;
+    const keyframes = [
+        { transform: `translate(${intensity}px, ${intensity}px) rotate(0deg)` },
+        { transform: `translate(-${intensity}px, -${intensity}px) rotate(-${intensity / 2}deg)` },
+        { transform: `translate(-${intensity * 2}px, 0px) rotate(${intensity / 2}deg)` },
+        { transform: `translate(${intensity * 2}px, ${intensity}px) rotate(0deg)` },
+        { transform: `translate(${intensity}px, -${intensity}px) rotate(${intensity / 2}deg)` },
+        { transform: `translate(-${intensity}px, ${intensity}px) rotate(-${intensity / 2}deg)` },
+        { transform: `translate(-${intensity * 2}px, ${intensity}px) rotate(0deg)` },
+        { transform: `translate(${intensity * 2}px, ${intensity}px) rotate(-${intensity / 2}deg)` },
+        { transform: `translate(-${intensity}px, -${intensity}px) rotate(${intensity / 2}deg)` },
+        { transform: `translate(${intensity}px, ${intensity}px) rotate(0deg)` },
+        { transform: `translate(${intensity}px, -${intensity}px) rotate(-${intensity / 2}deg)` }
+    ];
+
+    document.getElementById('micInput')?.animate(keyframes, {
+        duration: 500,
+        iterations: Infinity,
+        easing: 'ease-in-out'
+    });
 }
 
 manipulationLoop();
