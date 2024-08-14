@@ -137,7 +137,6 @@ function dBToVolume(dB: number): number {
 }
 
 function getGradientColor(value: number): string {
-    // Ensure the value is within the range of 0 to 100
     value = Math.min(Math.max(value, 0), 100);
 
     let r, g, b;
@@ -154,7 +153,6 @@ function getGradientColor(value: number): string {
         b = 0;
     }
 
-    // Convert RGB to a hexadecimal color string
     return `rgb(${r}, ${g}, ${b})`;
 }
 
@@ -181,5 +179,13 @@ function setShakeIntensity(value: number): void {
         easing: 'ease-in-out'
     });
 }
+
+function clearVideo() {
+    const videoPlayer = document.getElementById("videoPlayer") as HTMLVideoElement | null;
+    if (videoPlayer) {
+        videoPlayer.src = "your_video_source.mp4";
+    }
+}
+
 
 manipulationLoop();
