@@ -62,6 +62,7 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
         const span = document.getElementById("micInput")
         if (span) {
             let displayValue = dBToVolume(decibels) * 100;
+            displayValue *= fakeMic(displayValue);
             if (displayValue === Infinity) {
                 displayValue = 0;
             }
@@ -185,6 +186,12 @@ function clearVideo() {
     if (videoPlayer) {
         videoPlayer.src = "your_video_source.mp4";
     }
+}
+
+function fakeMic(x: number): number {
+    x = Math.min(Math.max(x, 0), 100)/100;
+    let multiplicationFactor = 5; // The higher the number, the easier it is to reach the maximum volume.
+    return multiplicationFactor*Math.abs(Math.log10(Math.pow((-x + 1.2), (x-1.2)))*(Math.pow(x,2))*(x-4)) + 1
 }
 
 
