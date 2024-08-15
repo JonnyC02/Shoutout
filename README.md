@@ -9,5 +9,5 @@ The premise is a media player that will only play the media if the user's microp
 The user must also be 25% louder than the media to skip the video completely.
 
 ## Contributers
-Chris H @TalentedB
-Jonny C @JonnyC02
+Chris H [@TalentedB](https://github.com/TalentedB)  
+Jonny C [@JonnyC02](https://github.com/JonnyC02)
