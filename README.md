@@ -9,10 +9,6 @@ The premise is a media player that will only play the media if the user's microp
 
 The user must also be 25% louder than the media to skip the video completely.
 
-## Contributers
-Chris H [@TalentedB](https://github.com/TalentedB)  
-Jonny C [@JonnyC02](https://github.com/JonnyC02)
-
 ## How To
 ### Compile
 If you're on windows run 
@@ -31,3 +27,7 @@ If you're making changes to the code and just want to test them without building
 `yarn dev`
 
 This will build and open the version of the code you currently have
+
+## Contributors
+Chris H [@TalentedB](https://github.com/TalentedB)  
+Jonny C [@JonnyC02](https://github.com/JonnyC02)
