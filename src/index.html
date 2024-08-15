@@ -72,13 +72,16 @@
         <button onclick="setVideoFile()">Import Video by File</button>
         <button onclick="setVideoFileFromUrl()">Import Video by URL</button>
         <p id="micInput">Microphone volume: 0</p>
-        <button onclick="clearVideo()">Clear</button>
+        <button onclick="clearVideo()" id="clearButton" hidden>Clear</button>
         <video id="videoPlayer"></video>
     </div>
 
     <script src="./renderer.js"></script>
     <script>
         function clearVideo() {
+            const btn = document.getElementById("clearButton");
+            btn.hidden = true
+            btn.ariaDisabled = "true"
             document.getElementById("videoPlayer").src = ""
         }
     </script>

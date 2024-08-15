@@ -25,6 +25,11 @@ function setVideoSrc(src: string): void {
         video.src = src;
         video.autoplay = true;
         video.controls = false;
+        const clearBtn = document.getElementById('clearButton') as HTMLButtonElement;
+        if (clearBtn) {
+            clearBtn.hidden = false;
+            clearBtn.disabled = true;
+        }
     }
 }
 
@@ -99,6 +104,12 @@ async function manipulationLoop(): Promise<void> {
         await new Promise(r => setTimeout(r, 100));
         let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
         let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 2;
+        const clearBtn = document.getElementById('clearButton') as HTMLButtonElement;
+        if (clearBtn) {
+            if ((videoDb * 1.25) < microphoneDb) {
+                clearBtn.disabled = false;
+            }
+        }
         if (videoDb === -Infinity) {
             console.log("Video will not keep playing");
             if (videoDb > microphoneDb) {
