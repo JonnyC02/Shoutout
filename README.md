@@ -57,7 +57,7 @@ This command will build and open the current version of your code.
 ### 🧪 Testing
 For easier testing purposes there are some assets located in `./src/assets/videos` that can be used to test the media player.
 
-- URL Version: `https://github.com/JonnyC02/Shoutout/raw/master/src/assets/videos/Gameplay.mp4`
+- URL Version: `https://github.com/JonnyC02/Shoutout/raw/master/src/assets/videos/Gameplay.mp4` (due to github's raw file serving, this link will contain no audio)
 - Local Version: `./src/assets/videos/Gameplay.mp4`
 
 
