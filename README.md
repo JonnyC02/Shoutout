@@ -55,7 +55,10 @@ yarn dev
 This command will build and open the current version of your code.
 
 ### 🧪 Testing
-For easier testing purposes there are some assets located in `./src/assets/examples` that can be used to test the media player.
+For easier testing purposes there are some assets located in `./src/assets/videos` that can be used to test the media player.
+
+- URL Version: `https://github.com/JonnyC02/Shoutout/raw/master/src/assets/videos/Gameplay.mp4`
+- Local Version: `./src/assets/videos/Gameplay.mp4`
 
 
 ## 👥 Contributors
