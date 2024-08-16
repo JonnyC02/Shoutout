@@ -71,10 +71,10 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
             if (displayValue === Infinity) {
                 displayValue = 0;
             }
+            displayValue = Math.min(Math.max(displayValue, 0), 100) // limit it to 0-100
             span.textContent = `Microphone volume: ${displayValue.toFixed(2)}%`
             span.style.color = getGradientColor(displayValue);
             setShakeIntensity(displayValue);
-            console.log(audioDataArray);
         }
     }
     console.log(isMic ? `Mic Decibel level: ${decibels.toFixed(2)} dB` : `Video Decibel level: ${decibels.toFixed(2)}`);
@@ -208,7 +208,7 @@ function clearVideo() {
 function fakeMic(x: number): number {
     x = Math.min(Math.max(x, 0), 100)/100;
     let multiplicationFactor = 30; // The higher the number, the easier it is to reach the maximum volume.
-    return multiplicationFactor*Math.abs(Math.log10(Math.pow((-x + 1.2), (x-1.2)))*(Math.pow(x,2))*(x-4)) + 1
+    return multiplicationFactor*Math.abs(Math.log10(Math.pow((-x + 1.2), (x-1.2)))*(Math.pow(x,2))*(x-4)) + 2
 }
 
 
