@@ -77,20 +77,6 @@
     </div>
 
     <script src="./renderer.js"></script>
-    <script>
-        function clearVideo() {
-            const videoPlayer = document.getElementById("videoPlayer");
-            const clearButton = document.getElementById("clearButton");
-
-            // Reset video source and load to clear any current playback state
-            videoPlayer.src = "";
-            videoPlayer.load(); // This ensures the video element is fully reset
-
-            // Hide the clear button after the video is cleared
-            clearButton.hidden = true;
-            clearButton.setAttribute("aria-disabled", "true");
-        }
-    </script>
     <script src="../dist/videoManipulation.js"></script>
 </body>
 

@@ -74,6 +74,7 @@ async function getDecibelLevels(analyser: AnalyserNode, audioDataArray: Uint8Arr
             span.textContent = `Microphone volume: ${displayValue.toFixed(2)}%`
             span.style.color = getGradientColor(displayValue);
             setShakeIntensity(displayValue);
+            console.log(audioDataArray);
         }
     }
     console.log(isMic ? `Mic Decibel level: ${decibels.toFixed(2)} dB` : `Video Decibel level: ${decibels.toFixed(2)}`);
@@ -103,32 +104,29 @@ async function manipulationLoop(): Promise<void> {
     const microphoneAudioDataArray = new Uint8Array(microphoneAnalyser.frequencyBinCount);
 
     // manipulation loop
-    while (!video.ended) {
+    while (true) {
         await new Promise(r => setTimeout(r, 100));
         let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
         let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 2;
         const clearBtn = document.getElementById('clearButton') as HTMLButtonElement;
         if (clearBtn) {
-            if ((videoDb * 1.25) < microphoneDb) {
+            if ((videoDb * 1.25) < microphoneDb && video.playbackRate != 0) {
                 clearBtn.disabled = false;
+            } else {
+                clearBtn.disabled = true;
             }
         }
         if (videoDb === -Infinity) {
-            console.log("Video will not keep playing");
             if (videoDb > microphoneDb) {
                 video.playbackRate = 0;
-                console.log("Video audio is louder than microphone audio");
             } else if (videoDb < microphoneDb) {
                 video.playbackRate = 1;
-                console.log("Microphone audio is louder than video audio");
             }
         } else {
             if ((videoDb * 1.1) > microphoneDb) {
                 video.playbackRate = 0;
-                console.log("Video audio is louder than microphone audio");
             } else if ((videoDb * 1.1) < microphoneDb) {
                 video.playbackRate = 1;
-                console.log("Microphone audio is louder than video audio");
             }
         }
     }
@@ -194,14 +192,22 @@ function setShakeIntensity(value: number): void {
 
 function clearVideo() {
     const videoPlayer = document.getElementById("videoPlayer") as HTMLVideoElement | null;
-    if (videoPlayer) {
-        videoPlayer.src = "your_video_source.mp4";
-    }
+    const clearButton = document.getElementById("clearButton") as HTMLButtonElement | null;
+    
+    if (!videoPlayer || !clearButton) return;
+
+    // Reset video source and load to clear any current playback state
+    videoPlayer.src = "";
+    videoPlayer.load(); // This ensures the video element is fully reset
+
+    // Hide the clear button after the video is cleared
+    clearButton.hidden = true;
+    clearButton.setAttribute("aria-disabled", "true");
 }
 
 function fakeMic(x: number): number {
     x = Math.min(Math.max(x, 0), 100)/100;
-    let multiplicationFactor = 5; // The higher the number, the easier it is to reach the maximum volume.
+    let multiplicationFactor = 30; // The higher the number, the easier it is to reach the maximum volume.
     return multiplicationFactor*Math.abs(Math.log10(Math.pow((-x + 1.2), (x-1.2)))*(Math.pow(x,2))*(x-4)) + 1
 }
 
