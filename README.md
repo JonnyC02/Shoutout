@@ -1,33 +1,64 @@
 # Shoutout
 
-Shoutout is a project made for the CodingWithLewis Hackathon 08/09/2024->08/16/2024
+Shoutout is an amazing media player developed for the CodingWithLewis Hackathon, 
+held from August 9th to August 16th, 2024. The theme for this hackathon was **"Functionally Dysfunctional."**
 
-The theme was functionally dysfunctional
+## 🎯 Project Premise
 
-## The Premise
-The premise is a media player that will only play the media if the user's microphone input is louder than the video volume at that time.
+Shoutout is designed to play media only when the user's microphone input is louder than the current video volume. 
+To skip the video entirely, the user's voice must be at least 25% louder than the media's audio.
 
-The user must also be 25% louder than the media to skip the video completely.
+### Future Features
+- Add a feature to allow users to adjust the sensitivity of the voice detection.
+- Add a feature to allow users to adjust the volume of the media.
+- Add a feature to allow for youtube video playback (currently only supports .mp4 files, no streamed content).
+- Add a feature to allow for 'Open With' functionality to open media files with Shoutout.
+- Add a feature to allow for the user to select the microphone to use for voice detection.
+- Add a feature to allow users to resize the media player
 
-## How To
-### Compile
-If you're on windows run 
+### Project Screenshots
 
-`yarn compile:win`
+![No media selected](./src/assets/examples/EmptyScreen.JPG)
 
-If you're on mac run
+![Media File Imported](./src/assets/examples/ImportedFile.JPG)
 
-`yarn compile:mac`
+![Media URL selected](./src/assets/examples/ImportedUrl.JPG)
 
-The built executable will be placed in the ./build folder in the project root
+### Bugs
+- Currently the media player playback jitters slightly when the microphone is not muted/completely silent, even if less than the video volume. (This is also a feature because its disfunctional)
 
-### Development
-If you're making changes to the code and just want to test them without building the solution run
+## 🚀 Getting Started
 
-`yarn dev`
+### 🛠️ How to Compile
 
-This will build and open the version of the code you currently have
+#### Windows
+To compile the project on Windows, run:
+```bash
+yarn compile:win
+```
 
-## Contributors
-Chris H [@TalentedB](https://github.com/TalentedB)  
-Jonny C [@JonnyC02](https://github.com/JonnyC02)
+#### macOS
+To compile the project on macOS, run:
+```bash
+yarn compile:mac
+```
+
+The compiled executable will be placed in the `./build` folder at the project root.
+
+### 🧪 Development Mode
+
+If you're actively developing and want to test changes without building the final executable, use:
+```bash
+yarn dev
+```
+
+This command will build and open the current version of your code.
+
+### 🧪 Testing
+For easier testing purposes there are some assets located in `./src/assets/examples` that can be used to test the media player.
+
+
+## 👥 Contributors
+
+- **Chris H** [@TalentedB](https://github.com/TalentedB)
+- **Jonny C** [@JonnyC02](https://github.com/JonnyC02)
