@@ -25,7 +25,7 @@ To skip the video entirely, the user's voice must be at least 25% louder than th
 ![Media URL selected](./src/assets/examples/ImportedUrl.JPG)
 
 ### Bugs
-- Currently the media player playback jitters slightly when the microphone is not muted/completely silent, even if less than the video volume. (This is also a feature because its disfunctional)
+- Currently the media player playback jitters slightly when the microphone is not muted/completely silent, this is due to the mic for a instance being detected as a loud noise, then the next instance not. To fix this we would need to implement a buffer to smooth out the mic input, as we did with video audio.
 
 ## 🚀 Getting Started
 

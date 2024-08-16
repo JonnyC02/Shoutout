@@ -1,3 +1,6 @@
+let videoRecentVolumes = [-100] as number[];
+
+
 async function getVideoFileUrl(): Promise<string> {
     try {
         const [fileHandle] = await (window as any).showOpenFilePicker({
@@ -107,7 +110,7 @@ async function manipulationLoop(): Promise<void> {
     while (true) {
         await new Promise(r => setTimeout(r, 100));
         let videoDb = await getDecibelLevels(videoAnalyser, videoAudioDataArray);
-        let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 2;
+        let microphoneDb = await getDecibelLevels(microphoneAnalyser, microphoneAudioDataArray, true) / 1.5;
         const clearBtn = document.getElementById('clearButton') as HTMLButtonElement;
         if (clearBtn) {
             if ((videoDb * 1.25) < microphoneDb && video.playbackRate != 0) {
@@ -116,16 +119,25 @@ async function manipulationLoop(): Promise<void> {
                 clearBtn.disabled = true;
             }
         }
+
         if (videoDb === -Infinity) {
-            if (videoDb > microphoneDb) {
-                video.playbackRate = 0;
-            } else if (videoDb < microphoneDb) {
+           if (getVideoHighestAudio() < microphoneDb) {
                 video.playbackRate = 1;
+            } else {
+                video.playbackRate = 0;
             }
         } else {
-            if ((videoDb * 1.1) > microphoneDb) {
+            // Keep track of the last 10 video decibel levels incase video is paused.
+            videoRecentVolumes.push(videoDb);
+            if (videoRecentVolumes.length > 20) {
+                videoRecentVolumes.shift();
+            }
+            
+            if (getVideoHighestAudio() > microphoneDb) {
+                // console.log(getVideoHighestAudio())
                 video.playbackRate = 0;
-            } else if ((videoDb * 1.1) < microphoneDb) {
+            } else if (getVideoHighestAudio() < microphoneDb) {
+                console.log("ITS HERE FOR SOME REASON: " + getVideoHighestAudio() + " " + microphoneDb)
                 video.playbackRate = 1;
             }
         }
@@ -207,8 +219,16 @@ function clearVideo() {
 
 function fakeMic(x: number): number {
     x = Math.min(Math.max(x, 0), 100)/100;
-    let multiplicationFactor = 30; // The higher the number, the easier it is to reach the maximum volume.
+    let multiplicationFactor = 20; // The higher the number, the easier it is to reach the maximum volume.
     return multiplicationFactor*Math.abs(Math.log10(Math.pow((-x + 1.2), (x-1.2)))*(Math.pow(x,2))*(x-4)) + 2
+}
+
+function getVideoRecentAudioAverage(): number {
+    return videoRecentVolumes.reduce((a, b) => a + b, 0) / videoRecentVolumes.length;
+}
+
+function getVideoHighestAudio(): number {
+    return Math.max(...videoRecentVolumes);
 }
 
 
