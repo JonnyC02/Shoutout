@@ -19,7 +19,7 @@ function createWindow(): void {
     });
 
     win.maximize();
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 
     win.loadURL(
         `file://${path.join(__dirname, '../src/index.html')}`
